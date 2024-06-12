@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+
+        header {
+            background-color: rgba(0, 68, 204, 0.9);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        header img {
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+            padding: 20px;
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .section h2 {
+            color: #0044cc;
+            border-bottom: 2px solid #0044cc;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        .student-info p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #0044cc;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #003399;
+        }
+
+        .payment-method {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .payment-method img {
+            width: 80px;
+            margin: 10px 0;
+        }
+
+        .loading {
+            display: none;
+            margin: 20px auto;
+            width: 50px;
+            height: 50px;
+            border: 6px solid rgba(0, 68, 204, 0.2);
+            border-top: 6px solid #0044cc;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success {
+            display: none;
+            text-align: center;
+        }
+
+        .success img {
+            width: 100px;
+        }
+
+        .success p {
+            font-size: 18px;
+            color: green;
+        }
+
+        .receipt {
+            display: none;
+            text-align: left;
+            background-color: rgba(255, 255, 255, 1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .receipt img {
+            width: 50px;
+            margin-right: 20px;
+        }
+
+        .receipt h2 {
+            border-bottom: 2px solid #0044cc;
+            padding-bottom: 5px;
+        }
+
+        .download-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <header>
+        <img src="logo.png" alt="University Logo">
+        <h1>University Course Registration</h1>
+    </header>
+
+    <div class="container">
+        <div class="section student-info">
+            <h2>Student Info</h2>
+            <p><strong>Name:</strong> Sheenal Pritika Kumar</p>
+            <p><strong>Student ID:</strong> 4544672</p>
+            <p><strong>Programme:</strong> PGDCS - PG Diploma in Cyber Security (Global Certification)</p>
+        </div>
+
+        <div class="section choose-course">
+            <h2>Choose Course</h2>
+            <div class="form-group">
+                <label for="courses">Select Course</label>
+                <select id="courses" name="courses" required>
+                    <option value="" disabled selected>Choose a course</option>
+                    <option value="NIT5086">NIT5086: Advanced Cryptographic Programming</option>
+                    <option value="NIT5090">NIT5090: Security Project and Publishing Research</option>
+                    <option value="NIT5091">NIT5091: Minor Thesis</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section payment">
+            <h2>Make Registration Payment</h2>
+            <p>Amount: AUD $125.00</p>
+            <div class="form-group">
+                <label for="cardName">Name on Card</label>
+                <input type="text" id="cardName" name="cardName" required>
+            </div>
+            <div class="form-group">
+                <label for="cardNumber">Card Number</label>
+                <input type="text" id="cardNumber" name="cardNumber" required>
+            </div>
+            <div class="form-group">
+                <label for="expDate">Expiry Date</label>
+                <input type="text" id="expDate" name="expDate" placeholder="MM/YY" required>
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV</label>
+                <input type="text" id="cvv" name="cvv" required>
+            </div>
+            <div class="payment-method">
+                <img src="visa.png" alt="Visa">
+            </div>
+            <button onclick="makePayment()">Pay Now</button>
+            <div class="loading" id="loading"></div>
+            <div class="success" id="success">
+                <img src="tick.jpg" alt="Success">
+                <p>Payment Successful!</p>
+            </div>
+            <div class="receipt" id="receipt">
+                <h2>Payment Receipt</h2>
+                <p><strong>Name:</strong> Sheenal Pritika Kumar</p>
+                <p><strong>Student ID:</strong> 4544672</p>
+                <p><strong>Programme:</strong> PGDCS - PG Diploma in Cyber Security (Global Certification)</p>
+                <p><strong>Course:</strong> <span id="receiptCourse"></span></p>
+                <p><strong>Payment Amount:</strong> AUD $125.00</p>
+                <p><strong>Receipt Number:</strong> <span id="receiptNumber"></span></p>
+                <div>
+                    <img src="logo.png" alt="University Logo">
+                    <img src="visa.png" alt="Visa">
+                </div>
+                <div class="download-button">
+                    <button onclick="downloadReceipt()">Download Receipt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function makePayment() {
+            const cardName = document.getElementById('cardName').value;
+            const cardNumber = document.getElementById('cardNumber').value;
+            const expDate = document.getElementById('expDate').value;
+            const cvv = document.getElementById('cvv').value;
+            const loading = document.getElementById('loading');
+            const success = document.getElementById('success');
+            const receipt = document.getElementById('receipt');
+
+            // Basic form validation
+            if (!cardName || !cardNumber || !expDate || !cvv) {
+                alert('Please fill out all fields');
+                return;
+            }
+
+            loading.style.display = 'block';
+
+            setTimeout(async () => {
+                loading.style.display = 'none';
+                success.style.display = 'block';
+                receipt.style.display = 'block';
+
+                const selectedCourse = document.getElementById('courses').value;
+                document.getElementById('receiptCourse').innerText = selectedCourse;
+
+                const receiptNumber = await generateReceiptNumber();
+                document.getElementById('receiptNumber').innerText = receiptNumber;
+            }, 5000); // Simulate loading delay
+        }
+
+        async function generateReceiptNumber() {
+            const now = new Date();
+            const data = `${now.toISOString()}${Math.random()}`;
+            const msgBuffer = new TextEncoder().encode(data);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
+        }
+
+        async function downloadReceipt() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            
+            const logo = new Image();
+            logo.src = 'logo.png';
+            const visa = new Image();
+            visa.src = 'visa.png';
+
+            logo.onload = () => {
+                pdf.addImage(logo, 'PNG', 10, 10, 50, 15);
+                visa.onload = () => {
+                    pdf.addImage(visa, 'PNG', 160, 10, 30, 15);
+                    pdf.text('Payment Receipt', 10, 40);
+                    pdf.text(`Name: Sheenal Pritika Kumar`, 10, 50);
+                    pdf.text(`Student ID: 4544672`, 10, 60);
+                    pdf.text(`Programme: PGDCS - PG Diploma in Cyber Security (Global Certification)`, 10, 70);
+                    pdf.text(`Course: ${document.getElementById('receiptCourse').innerText}`, 10, 80);
+                    pdf.text(`Payment Amount: AUD $125.00`, 10, 90);
+                    pdf.text(`Receipt Number: ${document.getElementById('receiptNumber').innerText}`, 10, 100);
+                    pdf.save('receipt.pdf');
+                };
+            };
+        }
+    </script>
+</body>
+</html>
